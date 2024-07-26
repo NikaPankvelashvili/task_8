@@ -1,6 +1,6 @@
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/Addons.js";
-import { RGBELoader } from "three/examples/jsm/Addons.js";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -20,9 +20,6 @@ const rgbeLoader = new RGBELoader();
 rgbeLoader.load(
   "https://threejs.org/examples/textures/memorial.hdr", // HDR texture URL
   function (texture) {
-    texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.background = texture;
-
     const geometry = new THREE.BoxGeometry(10, 10, 10);
     const material = new THREE.MeshBasicMaterial({
       map: texture,
@@ -30,6 +27,12 @@ rgbeLoader.load(
     });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
+  },
+  function (xhr) {
+    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+  },
+  function (error) {
+    console.error('An error happened', error);
   }
 );
 
